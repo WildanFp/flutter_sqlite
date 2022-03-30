@@ -1,30 +1,28 @@
-class Item{
+class Item {
   int? _id;
- int? get id => this._id;
- set id(int? value) => this._id = value;
+  int? get id => _id;
 
-  String? _name;
- String? get name => this._name;
- set name(String? value) => this._name = value;
+  late String _name;
+  String get name => _name;
+  set name(String value) => _name = value;
 
   int? _price;
- int? get price => this._price;
- set price(int? value) => this._price = value;
+  int? get price => _price;
+  set price(int? value) => _price = value;
 
-Item(this._id,this._name,this._price);
+  Item(this._name, this._price);
 
-Item.fromMap(Map<String,dynamic> map){
-  this._id = map['id'];
-  this._name = map['name'];
-  this._price = map['price'];
-}
+  Item.fromMap(Map<String, dynamic> map) {
+    _id = map['id'];
+    _name = map['name'];
+    _price = map['price'];
+  }
 
-Map<String, dynamic> toMap() {
-  Map<String, dynamic> map = Map<String, dynamic>();
-  map['id'] = this._id;
-  map['name'] = this._name;
-  map['price'] = this._price;
-  return map;
-}
-
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = Map<String, dynamic>();
+    map['id'] = id;
+    map['name'] = name;
+    map['price'] = price;
+    return map;
+  }
 }
