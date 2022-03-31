@@ -7,6 +7,8 @@ import 'package:flutter_sqlite/item.dart';
 
 //pendukung program asinkron
 class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   HomeState createState() => HomeState();
 }
@@ -14,16 +16,14 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   DbHelper dbHelper = DbHelper();
   int count = 0;
-  late List<Item> itemList;
+  List<Item>? itemList;
   @override
   Widget build(BuildContext context) {
     updateListView();
-    if (itemList == null) {
-      itemList = <Item>[];
-    }
+    itemList ??= <Item>[];
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daftar Item'),
+        title: const Text('Daftar Item'),
       ),
       body: Column(children: [
         Expanded(
@@ -33,12 +33,11 @@ class HomeState extends State<Home> {
           alignment: Alignment.bottomCenter,
           child: SizedBox(
             width: double.infinity,
-            child: RaisedButton(
-              child: Text("Tambah Item"),
+            child: ElevatedButton(
+              child: const Text("Tambah Item"),
               onPressed: () async {
                 var item = await navigateToEntryForm(context, null);
                 if (item != null) {
-                  //TODO 2 Panggil Fungsi untuk Insert ke DB
                   int result = await dbHelper.insert(item);
                   if (result > 0) {
                     updateListView();
@@ -69,24 +68,26 @@ class HomeState extends State<Home> {
           color: Colors.white,
           elevation: 2.0,
           child: ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundColor: Colors.red,
               child: Icon(Icons.ad_units),
             ),
             title: Text(
-              this.itemList[index].name,
+              itemList![index].name,
               style: textStyle,
             ),
-            subtitle: Text(this.itemList[index].price.toString()),
+            subtitle: Text(itemList![index].price.toString()),
             trailing: GestureDetector(
-              child: Icon(Icons.delete),
+              child: const Icon(Icons.delete),
               onTap: () async {
+                // ignore: todo
                 //TODO 3 Panggil Fungsi untuk Delete dari DB berdasarkan Item
               },
             ),
             onTap: () async {
               var item =
-                  await navigateToEntryForm(context, this.itemList[index]);
+                  await navigateToEntryForm(context, itemList![index]);
+              // ignore: todo
               //TODO 4 Panggil Fungsi untuk Edit data
             },
           ),
@@ -99,12 +100,13 @@ class HomeState extends State<Home> {
   void updateListView() {
     final Future<Database> dbFuture = dbHelper.initDb();
     dbFuture.then((database) {
+      // ignore: todo
       //TODO 1 Select data dari DB
       Future<List<Item>> itemListFuture = dbHelper.getItemList();
       itemListFuture.then((itemList) {
         setState(() {
           this.itemList = itemList;
-          this.count = itemList.length;
+          count = itemList.length;
         });
       });
     });
